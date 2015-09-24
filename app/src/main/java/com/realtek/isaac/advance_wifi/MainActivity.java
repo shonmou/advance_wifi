@@ -11,22 +11,32 @@ import android.view.View.OnClickListener;
 import android.view.View;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 public class MainActivity extends Activity {
     private static String logtag = "RTK-WIFI";
     private static WifiManager mWifiManager;
+    private TextView text2;
+    private TextView text3;
+    private TextView text5;
+    private boolean mRttSupport = false;
+    private boolean mPnoSupport = false;
+    private boolean mNanSupport = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final Button get_feature = (Button)findViewById(R.id.button1);
-        final Button pno_feature = (Button)findViewById(R.id.button2);
-        final Button clean = (Button)findViewById(R.id.button3);
-        get_feature.setOnClickListener(GetDeviceToApRttListener);
-        pno_feature.setOnClickListener(GetPNOListener);
-        clean.setOnClickListener(CleanListener);
+
+        text2 = (TextView) findViewById(R.id.textView2);
+        text3 = (TextView) findViewById(R.id.textView3);
+        text5 = (TextView) findViewById(R.id.textView5);
+
+        findViewById(R.id.ap_rtt_support).setOnClickListener(mClickListener);
+        findViewById(R.id.clean).setOnClickListener(mClickListener);
+        findViewById(R.id.pno_support).setOnClickListener(mClickListener);
+        findViewById(R.id.nan_support).setOnClickListener(mClickListener);
+        findViewById(R.id.enable_nan).setOnClickListener(mClickListener);
+        findViewById(R.id.disable_nan).setOnClickListener(mClickListener);
+
         mWifiManager = (WifiManager)getSystemService(Context.WIFI_SERVICE);
     }
 
@@ -54,26 +64,39 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private OnClickListener GetDeviceToApRttListener = new OnClickListener() {
-        public void onClick (View v) {
-            final TextView text = (TextView)findViewById(R.id.textView2);
-            boolean mRttSupport = mWifiManager.isDeviceToApRttSupported();
-            text.setText(" "+ mRttSupport);
-        }
-    };
-    private OnClickListener GetPNOListener = new OnClickListener() {
-        public void onClick (View v) {
-            final TextView text = (TextView)findViewById(R.id.textView3);
-            boolean mPnoSupport = mWifiManager.isPreferredNetworkOffloadSupported();
-            text.setText(" "+ mPnoSupport);
-        }
-    };
-    private OnClickListener CleanListener = new OnClickListener() {
-        public void onClick (View v) {
-            final TextView t2 = (TextView)findViewById(R.id.textView2);
-            final TextView t3 = (TextView)findViewById(R.id.textView3);
-            t2.setText("--");
-            t3.setText("--");
-        }
-    };
+    private View.OnClickListener mClickListener;
+
+    {
+        mClickListener = new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.ap_rtt_support:
+                        mRttSupport = mWifiManager.isDeviceToApRttSupported();
+                        text2.setText(" " + mRttSupport);
+                        break;
+                    case R.id.clean:
+                        mRttSupport = false;
+                        mPnoSupport = false;
+                        mNanSupport = false;
+                        text2.setText("--");
+                        text3.setText("--");
+                        text5.setText("--");
+                        break;
+                    case R.id.pno_support:
+                        mPnoSupport = mWifiManager.isPreferredNetworkOffloadSupported();
+                        text3.setText(" " + mPnoSupport);
+                        break;
+                    case R.id.nan_support:
+                        mNanSupport = false;
+                        text5.setText("Not Available");
+                        break;
+                    case R.id.enable_nan:
+                        break;
+                    case R.id.disable_nan:
+                        break;
+                }
+            }
+        };
+    }
 }

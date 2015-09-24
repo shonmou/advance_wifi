@@ -47,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="check-ap-rtt-support"
-        android:id="@+id/button1"
+        android:id="@+id/ap_rtt_support"
         android:layout_marginTop="72dp"
         android:layout_below="@+id/textView1"
         android:layout_alignParentStart="true" />
@@ -56,8 +56,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="CHECK-PNO"
-        android:id="@+id/button2"
-        android:layout_below="@+id/button1"
+        android:id="@+id/pno_support"
+        android:layout_below="@+id/ap_rtt_support"
         android:layout_alignParentStart="true" />
 
     <Button
@@ -65,9 +65,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Clean"
-        android:id="@+id/button3"
-        android:layout_alignTop="@+id/button1"
-        android:layout_toEndOf="@+id/button1" />
+        android:id="@+id/clean"
+        android:layout_alignTop="@+id/ap_rtt_support"
+        android:layout_toEndOf="@+id/ap_rtt_support" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -91,24 +91,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Check NAN"
-        android:id="@+id/button4"
-        android:layout_below="@+id/button2"
+        android:id="@+id/nan_support"
+        android:layout_below="@+id/pno_support"
         android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Enable NAN"
-        android:id="@+id/button5"
-        android:layout_below="@+id/button2"
-        android:layout_toEndOf="@+id/button2" />
+        android:id="@+id/enable_nan"
+        android:layout_below="@+id/pno_support"
+        android:layout_toEndOf="@+id/pno_support" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Disable NAN"
-        android:id="@+id/button6"
-        android:layout_alignTop="@+id/button5"
-        android:layout_toEndOf="@+id/button5" />
+        android:id="@+id/disable_nan"
+        android:layout_alignTop="@+id/enable_nan"
+        android:layout_toEndOf="@+id/enable_nan" />
 
 </RelativeLayout>
