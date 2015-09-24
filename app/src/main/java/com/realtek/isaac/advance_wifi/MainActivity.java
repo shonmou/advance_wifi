@@ -24,7 +24,7 @@ public class MainActivity extends Activity {
         final Button get_feature = (Button)findViewById(R.id.button1);
         final Button pno_feature = (Button)findViewById(R.id.button2);
         final Button clean = (Button)findViewById(R.id.button3);
-        get_feature.setOnClickListener(GetFeatureListener);
+        get_feature.setOnClickListener(GetDeviceToApRttListener);
         pno_feature.setOnClickListener(GetPNOListener);
         clean.setOnClickListener(CleanListener);
         mWifiManager = (WifiManager)getSystemService(Context.WIFI_SERVICE);
@@ -54,7 +54,7 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private OnClickListener GetFeatureListener = new OnClickListener() {
+    private OnClickListener GetDeviceToApRttListener = new OnClickListener() {
         public void onClick (View v) {
             final TextView text = (TextView)findViewById(R.id.textView2);
             boolean mRttSupport = mWifiManager.isDeviceToApRttSupported();
