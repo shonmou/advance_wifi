@@ -10,10 +10,13 @@ import android.widget.Button;
 import android.view.View.OnClickListener;
 import android.view.View;
 import android.widget.TextView;
+import android.net.wifi.aware.WifiAwareManager;
+import android.content.pm.PackageManager;
 
 public class MainActivity extends Activity {
     private static String logtag = "RTK-WIFI";
     private static WifiManager mWifiManager;
+    private static WifiAwareManager mWifiAwareManager;
     private TextView text2;
     private TextView text3;
     private TextView text5;
@@ -25,7 +28,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         text2 = (TextView) findViewById(R.id.textView2);
         text3 = (TextView) findViewById(R.id.textView3);
         text5 = (TextView) findViewById(R.id.textView5);
@@ -38,6 +40,8 @@ public class MainActivity extends Activity {
         findViewById(R.id.disable_nan).setOnClickListener(mClickListener);
 
         mWifiManager = (WifiManager)getSystemService(Context.WIFI_SERVICE);
+        mWifiAwareManager = (WifiAwareManager)getSystemService(Context.WIFI_AWARE_SERVICE);
+        mNanSupport = getPackageManager().hasSystemFeature(PackageManager.FEATURE_WIFI_AWARE);
     }
 
 
@@ -88,8 +92,7 @@ public class MainActivity extends Activity {
                         text3.setText(" " + mPnoSupport);
                         break;
                     case R.id.nan_support:
-                        mNanSupport = false;
-                        text5.setText("Not Available");
+                        text5.setText(" " + mNanSupport);
                         break;
                     case R.id.enable_nan:
                         break;
