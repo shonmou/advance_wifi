@@ -1,17 +1,20 @@
 package com.realtek.isaac.advance_wifi;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.net.wifi.WifiManager;
+import android.net.wifi.aware.WifiAwareManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.view.View.OnClickListener;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
-import android.net.wifi.aware.WifiAwareManager;
-import android.content.pm.PackageManager;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
     private static String logtag = "RTK-WIFI";
@@ -23,6 +26,38 @@ public class MainActivity extends Activity {
     private boolean mRttSupport = false;
     private boolean mPnoSupport = false;
     private boolean mNanSupport = false;
+    private Button nan_en;
+    private Button nan_dis;
+
+    private void update_screen() {
+        mRttSupport = mWifiManager.isDeviceToApRttSupported();
+        mPnoSupport = mWifiManager.isPreferredNetworkOffloadSupported();
+        mNanSupport = getPackageManager().hasSystemFeature(PackageManager.FEATURE_WIFI_AWARE);
+
+        text2.setText(" " + mRttSupport);
+        text3.setText(" " + mPnoSupport);
+        text5.setText(" " + mNanSupport);
+
+        if (mNanSupport) {
+            nan_en.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    /*TODO: */
+                    Toast.makeText(getApplicationContext(), "attach nan", Toast.LENGTH_LONG).show();
+                }
+            });
+            nan_dis.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    /*TODO*/
+                    Toast.makeText(getApplicationContext(), "dis nan", Toast.LENGTH_LONG).show();
+                }
+            });
+        } else {
+            nan_en.setEnabled(false);
+            nan_dis.setEnabled(false);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,19 +67,28 @@ public class MainActivity extends Activity {
         text3 = (TextView) findViewById(R.id.textView3);
         text5 = (TextView) findViewById(R.id.textView5);
 
-        findViewById(R.id.ap_rtt_support).setOnClickListener(mClickListener);
-        findViewById(R.id.clean).setOnClickListener(mClickListener);
-        findViewById(R.id.pno_support).setOnClickListener(mClickListener);
-        findViewById(R.id.nan_support).setOnClickListener(mClickListener);
-        findViewById(R.id.enable_nan).setOnClickListener(mClickListener);
-        findViewById(R.id.disable_nan).setOnClickListener(mClickListener);
+        nan_en = (Button) findViewById(R.id.enable_nan);
+        nan_dis = (Button) findViewById(R.id.disable_nan);
 
         mWifiManager = (WifiManager)getSystemService(Context.WIFI_SERVICE);
         mWifiAwareManager = (WifiAwareManager)getSystemService(Context.WIFI_AWARE_SERVICE);
-        mNanSupport = getPackageManager().hasSystemFeature(PackageManager.FEATURE_WIFI_AWARE);
+
+        /* register a broadcast receiver for wifi aware state change*/
+        IntentFilter filter =
+                new IntentFilter(WifiAwareManager.ACTION_WIFI_AWARE_STATE_CHANGED);
+        BroadcastReceiver br = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (mWifiAwareManager.isAvailable()) {
+                    /*TODO...*/
+                } else {
+                    /*TODO...*/
+                }
+            }
+        };
+        this.registerReceiver(br, filter);
+        update_screen();
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -64,42 +108,6 @@ public class MainActivity extends Activity {
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
-    }
-
-    private View.OnClickListener mClickListener;
-
-    {
-        mClickListener = new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.ap_rtt_support:
-                        mRttSupport = mWifiManager.isDeviceToApRttSupported();
-                        text2.setText(" " + mRttSupport);
-                        break;
-                    case R.id.clean:
-                        mRttSupport = false;
-                        mPnoSupport = false;
-                        mNanSupport = false;
-                        text2.setText("--");
-                        text3.setText("--");
-                        text5.setText("--");
-                        break;
-                    case R.id.pno_support:
-                        mPnoSupport = mWifiManager.isPreferredNetworkOffloadSupported();
-                        text3.setText(" " + mPnoSupport);
-                        break;
-                    case R.id.nan_support:
-                        text5.setText(" " + mNanSupport);
-                        break;
-                    case R.id.enable_nan:
-                        break;
-                    case R.id.disable_nan:
-                        break;
-                }
-            }
-        };
     }
 }
